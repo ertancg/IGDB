@@ -13,6 +13,8 @@
 		CA4063FA282021DF00DD11DD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CA4063F8282021DF00DD11DD /* Main.storyboard */; };
 		CA4063FC282021E000DD11DD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CA4063FB282021E000DD11DD /* Assets.xcassets */; };
 		CA4063FF282021E000DD11DD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CA4063FD282021E000DD11DD /* LaunchScreen.storyboard */; };
+		CA406409282036B900DD11DD /* CollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA406408282036B900DD11DD /* CollectionViewCell.swift */; };
+		CA40640B2820380500DD11DD /* GameDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA40640A2820380500DD11DD /* GameDataSource.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +26,8 @@
 		CA4063FB282021E000DD11DD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CA4063FE282021E000DD11DD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CA406400282021E000DD11DD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CA406408282036B900DD11DD /* CollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewCell.swift; sourceTree = "<group>"; };
+		CA40640A2820380500DD11DD /* GameDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameDataSource.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -40,6 +44,7 @@
 		CA4063E6282021DE00DD11DD = {
 			isa = PBXGroup;
 			children = (
+				CA40640A2820380500DD11DD /* GameDataSource.swift */,
 				CA4063F1282021DE00DD11DD /* Video Game App */,
 				CA4063F0282021DE00DD11DD /* Products */,
 			);
@@ -63,6 +68,7 @@
 				CA4063FB282021E000DD11DD /* Assets.xcassets */,
 				CA4063FD282021E000DD11DD /* LaunchScreen.storyboard */,
 				CA406400282021E000DD11DD /* Info.plist */,
+				CA406408282036B900DD11DD /* CollectionViewCell.swift */,
 			);
 			path = "Video Game App";
 			sourceTree = "<group>";
@@ -140,6 +146,8 @@
 			files = (
 				CA4063F7282021DE00DD11DD /* ViewController.swift in Sources */,
 				CA4063F3282021DE00DD11DD /* AppDelegate.swift in Sources */,
+				CA40640B2820380500DD11DD /* GameDataSource.swift in Sources */,
+				CA406409282036B900DD11DD /* CollectionViewCell.swift in Sources */,
 				CA4063F5282021DE00DD11DD /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
