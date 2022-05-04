@@ -18,6 +18,7 @@ class GameDataSource{
     var nextPage = -1
     var currentPage = 1
     var refreshing = true
+    var likedGames: [Result] = []
     
     init(){
         loadGameList(page: currentPage)
@@ -59,6 +60,24 @@ class GameDataSource{
                 }
             }
             dataTask.resume()
+        }
+    }
+    
+    func likeGame(for game: Result){
+        self.likedGames.append(game)
+    }
+    
+    func dislikeGame(for game: Result){
+        if let index = self.likedGames.firstIndex(where: {$0.id == game.id}){
+            self.likedGames.remove(at: index)
+        }
+    }
+    
+    func isLiked(for game: Result) -> Bool{
+        if let index = self.likedGames.firstIndex(where: {$0.id == game.id}){
+            return true
+        }else{
+            return false
         }
     }
 }
