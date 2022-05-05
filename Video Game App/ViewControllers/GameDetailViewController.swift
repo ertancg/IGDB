@@ -1,10 +1,3 @@
-//
-//  GameDetailViewController.swift
-//  Video Game App
-//
-//  Created by Ertan Can Güner on 4.05.2022.
-//
-
 import UIKit
 
 class GameDetailViewController: UIViewController {
@@ -17,7 +10,6 @@ class GameDetailViewController: UIViewController {
     @IBOutlet weak var releaseDateLabel: UILabel!
     @IBOutlet weak var gameNameLabel: UILabel!
     @IBOutlet weak var gameImage: UIImageView!
-    
     @IBOutlet weak var likeButtonLabel: UIButton!
     
     var liked = false
@@ -26,10 +18,15 @@ class GameDetailViewController: UIViewController {
         super.viewDidLoad()
         likeButtonLabel.alpha = 0
         self.dataSource.detailsPageDelegate = self
-        self.dataSource.loadGameDetails(for: (selectedGame?.id)!)
-        liked = self.dataSource.isLiked(for: selectedGame!)
+        if let game = selectedGame{
+            if let id = game.id{
+                self.dataSource.loadGameDetails(for: id)
+            }
+            liked = self.dataSource.isLiked(for: game)
+        }
         changeLikeButton()
     }
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         self.scrollView.contentSize.height = 3000
@@ -38,18 +35,21 @@ class GameDetailViewController: UIViewController {
         self.gameDetailsLabel.lineBreakMode = NSLineBreakMode.byWordWrapping
         self.gameDetailsLabel.frame = self.scrollView.frame
     }
+    
     @IBAction func likeButton(_ sender: Any) {
         self.liked.toggle()
         changeLikeButton()
-        if(liked){
-            self.dataSource.likeGame(for: self.selectedGame!)
-        }else{
-            self.dataSource.dislikeGame(for: self.selectedGame!)
+        if let game = self.selectedGame{
+            if(liked){
+                self.dataSource.likeGame(for: game)
+            }else{
+                self.dataSource.dislikeGame(for: game)
+            }
         }
     }
     
     func changeLikeButton(){
-        if(liked){
+        if(self.liked){
             self.likeButtonLabel.setImage(UIImage(systemName: "hand.thumbsup.fill"), for: .normal)
             self.likeButtonLabel.tintColor = .red
         }else{
@@ -64,8 +64,12 @@ extension GameDetailViewController: GameDetailsDelegate{
     func gameRecieved(for game: GameDetails) {
         self.likeButtonLabel.alpha = 1
         changeLikeButton()
-        if let url = game.backgroundImage{
-            self.gameImage.load(url: URL(string: url)!)
+        if let imagePath = game.backgroundImage{
+            if let url = URL(string: imagePath){
+                self.gameImage.load(url: url)
+            }else{
+                self.gameImage.image = UIImage(systemName: "point.3.connected.trianglepath.dotted")
+            }
         }else{
             self.gameImage.image = UIImage(systemName: "point.3.connected.trianglepath.dotted")
         }
@@ -92,7 +96,5 @@ extension GameDetailViewController: GameDetailsDelegate{
             self.gameDetailsLabel.text = "N/A"
         }
     }
-    
-    
 }
 

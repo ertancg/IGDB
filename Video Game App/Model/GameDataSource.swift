@@ -1,10 +1,3 @@
-//
-//  GameDataSource.swift
-//  Video Game App
-//
-//  Created by Ertan Can Güner on 2.05.2022.
-//
-
 import Foundation
 
 class GameDataSource{
@@ -17,17 +10,23 @@ class GameDataSource{
     var mainPageDelegate: GameMainPageDelegate?
     var detailsPageDelegate: GameDetailsDelegate?
     
-    var nextPage = -1
     var currentPage = 1
     
     var likedGames: [Result] = []
     var gameDetails: GameDetails?
+    
+    var searchedGames: [Result?] = []
+    var refreshing = false
     
     init(){
         loadGameList(page: currentPage)
     }
     
     func getGameIndex(for index: Int) -> Result?{
+        let ratio = Double(index) / Double(games.count)
+        if(ratio > 0.5){
+            lowListWarning()
+        }
         if let game = games[index]{
             return game
         }else{
@@ -39,6 +38,38 @@ class GameDataSource{
         return games.count
     }
     
+    func searchGame(for query: String){
+        self.searchedGames = self.games.filter{ elm in
+            if let name = elm?.name?.lowercased(){
+                if(name.contains(query.lowercased())){
+                    return true
+                }else{
+                    return false
+                }
+            }else{
+                return false
+            }
+        }
+        self.mainPageDelegate?.searchDone()
+    }
+    
+    func searchResultCount() -> Int{
+        return self.searchedGames.count
+    }
+    
+    func getSearchedGame(for index: Int) -> Result?{
+        if let game = self.searchedGames[index]{
+            return game
+        }else{
+            return nil
+        }
+    }
+    func lowListWarning(){
+        if(!refreshing){
+            loadGameList(page: self.currentPage + 1)
+            self.refreshing = true
+        }
+    }
     func loadGameList(page: Int){
         let urlSession = URLSession.shared
         if let url = URL(string: "\(baseURL)?key=\(apiKey)&page=\(page)") {
@@ -57,7 +88,8 @@ class GameDataSource{
                     }
                     DispatchQueue.main.async {
                         self.mainPageDelegate?.gameListLoaded()
-                        self.nextPage = self.currentPage + 1
+                        print("Recieved Page \(self.currentPage)")
+                        self.refreshing = false
                     }
                 }
             }

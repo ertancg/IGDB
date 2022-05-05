@@ -4,7 +4,7 @@ import Foundation
 struct Network_Data: Codable {
     let count: Int?
     let next: String?
-    let previous: JSONNull?
+    let previous: String?
     let results: [Result]?
     let seoTitle, seoDescription, seoKeywords, seoH1: String?
     let noindex, nofollow: Bool?
@@ -60,14 +60,14 @@ struct Result: Codable {
     let metacritic: Int?
     let playtime, suggestionsCount: Int?
     let updated: String?
-    let userGame: JSONNull?
+    let userGame: Bool?
     let reviewsCount: Int?
     let saturatedColor, dominantColor: Color?
     let platforms: [PlatformElement]?
     let parentPlatforms: [ParentPlatform]?
     let genres: [Genre]?
     let stores: [Store]?
-    let clip: JSONNull?
+    let clip: String?
     let tags: [Genre]?
     let esrbRating: EsrbRating?
     let shortScreenshots: [ShortScreenshot]?
@@ -169,7 +169,7 @@ struct PlatformElement: Codable {
 struct PlatformPlatform: Codable {
     let id: Int?
     let name, slug: String?
-    let image, yearEnd: JSONNull?
+    let image, yearEnd: String?
     let yearStart: Int?
     let gamesCount: Int?
     let imageBackground: String?
@@ -214,33 +214,5 @@ struct Store: Codable {
     let id: Int?
     let store: Genre?
 }
-
-// MARK: - Encode/decode helpers
-
-class JSONNull: Codable, Hashable {
-
-    public static func == (lhs: JSONNull, rhs: JSONNull) -> Bool {
-        return true
-    }
-
-    public var hashValue: Int {
-        return 0
-    }
-
-    public init() {}
-
-    public required init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if !container.decodeNil() {
-            throw DecodingError.typeMismatch(JSONNull.self, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Wrong type for JSONNull"))
-        }
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        try container.encodeNil()
-    }
-}
-
  
  

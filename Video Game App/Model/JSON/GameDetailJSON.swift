@@ -26,7 +26,7 @@ struct GameDetails: Codable {
     let alternativeNames: [String]?
     let metacriticURL: String?
     let parentsCount, additionsCount, gameSeriesCount: Int?
-    let userGame: JSONNull?
+    let userGame: Bool?
     let reviewsCount: Int?
     let saturatedColor, dominantColor: String?
     let parentPlatforms: [ParentPlatform]?
@@ -34,7 +34,7 @@ struct GameDetails: Codable {
     let stores: [Details_Store]?
     let developers, genres, tags, publishers: [Developer]?
     let esrbRating: EsrbRating?
-    let clip: JSONNull?
+    let clip: String?
     let descriptionRaw: String?
 
     enum CodingKeys: String, CodingKey {
