@@ -11,7 +11,8 @@ class GameDetailViewController: UIViewController {
     var selectedGame: Result?
     let dataSource = GameDataSource.shared
     
-    @IBOutlet weak var descriptionLabel: UILabel!
+    @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var gameDetailsLabel: UILabel!
     @IBOutlet weak var metacriticLabel: UILabel!
     @IBOutlet weak var releaseDateLabel: UILabel!
     @IBOutlet weak var gameNameLabel: UILabel!
@@ -23,15 +24,20 @@ class GameDetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.gameImage.load(url: URL(string: (self.selectedGame?.backgroundImage)!)!)
-        self.gameNameLabel.text = self.selectedGame?.name
-        self.releaseDateLabel.text = "\(Double((self.selectedGame?.released)!))"
-        self.metacriticLabel.text = "\(Int((self.selectedGame?.metacritic)!))"
-        self.descriptionLabel.text = self.selectedGame?.released
+        likeButtonLabel.alpha = 0
+        self.dataSource.detailsPageDelegate = self
+        self.dataSource.loadGameDetails(for: (selectedGame?.id)!)
         liked = self.dataSource.isLiked(for: selectedGame!)
         changeLikeButton()
     }
-    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        self.scrollView.contentSize.height = 3000
+        self.scrollView.contentSize.width = UIScreen.main.bounds.width
+        self.gameDetailsLabel.numberOfLines = 0
+        self.gameDetailsLabel.lineBreakMode = NSLineBreakMode.byWordWrapping
+        self.gameDetailsLabel.frame = self.scrollView.frame
+    }
     @IBAction func likeButton(_ sender: Any) {
         self.liked.toggle()
         changeLikeButton()
@@ -52,5 +58,41 @@ class GameDetailViewController: UIViewController {
         }
     }
 
+}
+
+extension GameDetailViewController: GameDetailsDelegate{
+    func gameRecieved(for game: GameDetails) {
+        self.likeButtonLabel.alpha = 1
+        changeLikeButton()
+        if let url = game.backgroundImage{
+            self.gameImage.load(url: URL(string: url)!)
+        }else{
+            self.gameImage.image = UIImage(systemName: "point.3.connected.trianglepath.dotted")
+        }
+        if let name = game.name{
+            self.gameNameLabel.text = name
+        }else{
+            self.gameNameLabel.text = "N/A"
+        }
+        if let release = game.released{
+            self.releaseDateLabel.text = (release == "nil" ? "N/A" : release)
+        }else{
+            self.releaseDateLabel.text = "N/A"
+        }
+        if let meta = game.metacritic{
+            self.metacriticLabel.text = "\(Int(meta))"
+        }else{
+            self.metacriticLabel.text = "N/A"
+        }
+        if let description = game.gameDetailsDescription{
+            self.gameDetailsLabel.text = description.replacingOccurrences(of: "<p>", with: "")
+            self.gameDetailsLabel.text = self.gameDetailsLabel.text!.replacingOccurrences(of: "</p>", with: "")
+            self.gameDetailsLabel.text = self.gameDetailsLabel.text!.replacingOccurrences(of: "</br>", with: "")
+        }else{
+            self.gameDetailsLabel.text = "N/A"
+        }
+    }
+    
+    
 }
 

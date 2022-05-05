@@ -20,7 +20,8 @@ class ViewController: UIViewController {
     var currentPageIndex = 0
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.dataSource.delegate = self
+        self.pageControl.alpha = 0
+        self.dataSource.mainPageDelegate = self
         self.pageControl.numberOfPages = 3
         
         scrollView.delegate = self
@@ -40,18 +41,14 @@ class ViewController: UIViewController {
     
     func setupScreens() {
         for index in 0..<3 {
-            // 1.
             frame.origin.x = scrollView.frame.size.width * CGFloat(index)
             frame.size = scrollView.frame.size
             
-            // 2.
             let imgView = UIImageView(frame: frame)
             imgView.load(url: URL(string: (self.dataSource.games[index]?.backgroundImage!)!)!)
 
             self.scrollView.addSubview(imgView)
         }
-
-        // 3.
         scrollView.contentSize = CGSize(width: (scrollView.frame.size.width * CGFloat(3)), height: scrollView.frame.size.height)
         scrollView.delegate = self
     }
@@ -68,11 +65,11 @@ class ViewController: UIViewController {
         }
     }
 }
-extension ViewController: GameDataSourceDelegate{
+extension ViewController: GameMainPageDelegate{
     func gameListLoaded() {
         self.gameCollectionView.reloadData()
         self.setupScreens()
-        print("data recieved")
+        self.pageControl.alpha = 1
     }
 }
 extension ViewController: UICollectionViewDataSource{

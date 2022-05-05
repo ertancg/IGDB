@@ -14,11 +14,14 @@ class GameDataSource{
     let apiKey = "2c00ba57109447cfbf4d25046b0c6a27"
     let baseURL = "https://api.rawg.io/api/games"
     
-    var delegate: GameDataSourceDelegate?
+    var mainPageDelegate: GameMainPageDelegate?
+    var detailsPageDelegate: GameDetailsDelegate?
+    
     var nextPage = -1
     var currentPage = 1
-    var refreshing = true
+    
     var likedGames: [Result] = []
+    var gameDetails: GameDetails?
     
     init(){
         loadGameList(page: currentPage)
@@ -53,9 +56,31 @@ class GameDataSource{
                         print(error)
                     }
                     DispatchQueue.main.async {
-                        self.delegate?.gameListLoaded()
-                        self.refreshing.toggle()
+                        self.mainPageDelegate?.gameListLoaded()
                         self.nextPage = self.currentPage + 1
+                    }
+                }
+            }
+            dataTask.resume()
+        }
+    }
+    
+    func loadGameDetails(for id: Int){
+        let urlSession = URLSession.shared
+        if let url = URL(string: "\(baseURL)/\(id)?key=\(apiKey)") {
+            var urlRequest = URLRequest(url: url)
+            urlRequest.httpMethod = "GET"
+            urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
+            let dataTask = urlSession.dataTask(with: urlRequest) { data, response, error in
+                if let data = data {
+                    let decoder = JSONDecoder()
+                    do{
+                        self.gameDetails = try decoder.decode(GameDetails.self, from: data)
+                    }catch let error{
+                        print(error)
+                    }
+                    DispatchQueue.main.async{
+                        self.detailsPageDelegate?.gameRecieved(for: self.gameDetails!)
                     }
                 }
             }
@@ -68,7 +93,7 @@ class GameDataSource{
     }
     
     func dislikeGame(for game: Result){
-        if let index = self.likedGames.firstIndex(where: {$0.id == game.id}){
+        if let index = self.likedGames.firstIndex(where: {$0.name == game.name}){
             self.likedGames.remove(at: index)
         }
     }
@@ -79,5 +104,13 @@ class GameDataSource{
         }else{
             return false
         }
+    }
+    
+    func getNumberOfLiked() -> Int{
+        return self.likedGames.count
+    }
+    
+    func getLikedGame(for index: Int) -> Result?{
+        return self.likedGames[index]
     }
 }
