@@ -1,5 +1,5 @@
 import Foundation
-
+//This for parsing the json that came from the endpoint list of all games
 // MARK: - Network_Data
 struct Network_Data: Codable {
     let count: Int?

@@ -1,5 +1,5 @@
 import Foundation
-
+//This for parsing the json that came from the endpoint details of games
 // MARK: - GameDetails
 struct GameDetails: Codable {
     let id: Int?

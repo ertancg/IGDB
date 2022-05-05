@@ -1,5 +1,5 @@
 import UIKit
-
+//This is the Favorites View Controller for the Favorites Tab View
 class FavoritesViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     
@@ -9,10 +9,12 @@ class FavoritesViewController: UIViewController {
         super.viewDidLoad()
     }
     
+    //Update the table everytime it appears
     override func viewWillAppear(_ animated: Bool) {
         self.tableView.reloadData()
     }
     
+    //Preparation for switching to Game Detail View
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let cell = sender as! FavoritesTableViewCell
         if let indexPath = self.tableView.indexPath(for: cell) {
@@ -31,6 +33,7 @@ extension FavoritesViewController: UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.dataSource.getNumberOfLiked()
     }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "TableCell", for: indexPath) as! FavoritesTableViewCell
         if let game = dataSource.getLikedGame(for: indexPath.row){

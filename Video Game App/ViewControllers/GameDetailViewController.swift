@@ -1,5 +1,5 @@
 import UIKit
-
+//This is the Game Detail View Controller for the Game Detail View
 class GameDetailViewController: UIViewController {
     var selectedGame: Result?
     let dataSource = GameDataSource.shared
@@ -14,6 +14,7 @@ class GameDetailViewController: UIViewController {
     
     var liked = false
     
+    //First check for if the game is liked so set the like button accordingly
     override func viewDidLoad() {
         super.viewDidLoad()
         likeButtonLabel.alpha = 0
@@ -27,6 +28,7 @@ class GameDetailViewController: UIViewController {
         changeLikeButton()
     }
     
+    //This is for setting borders of the label in the description field
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         self.scrollView.contentSize.height = 3000
@@ -36,6 +38,7 @@ class GameDetailViewController: UIViewController {
         self.gameDetailsLabel.frame = self.scrollView.frame
     }
     
+    //Like button actions remove it from the liked list if its liked or added to liked list if its not liked
     @IBAction func likeButton(_ sender: Any) {
         self.liked.toggle()
         changeLikeButton()
@@ -48,6 +51,7 @@ class GameDetailViewController: UIViewController {
         }
     }
     
+    //This is for setting the like button
     func changeLikeButton(){
         if(self.liked){
             self.likeButtonLabel.setImage(UIImage(systemName: "hand.thumbsup.fill"), for: .normal)
@@ -60,6 +64,7 @@ class GameDetailViewController: UIViewController {
 
 }
 
+//After the game details is recieved with the data source this function is called to set the information on the view accordingly
 extension GameDetailViewController: GameDetailsDelegate{
     func gameRecieved(for game: GameDetails) {
         self.likeButtonLabel.alpha = 1

@@ -1,5 +1,5 @@
 import UIKit
-
+//This is the Main Page View Controller for the Main Page Tab
 class MainPageViewController: UIViewController {
 
     @IBOutlet weak var searchBar: UITextField!
@@ -14,6 +14,8 @@ class MainPageViewController: UIViewController {
     
     let dataSource = GameDataSource.shared
     var currentPageIndex = 0
+    
+    //Set the visibility of some views in initial load
     override func viewDidLoad() {
         super.viewDidLoad()
         self.pageControl.alpha = 0
@@ -23,6 +25,7 @@ class MainPageViewController: UIViewController {
         
         scrollView.delegate = self
         
+        //Setting the tab bar items
         if let tabBarItem1 = self.tabBarController?.tabBar.items?[0] {
             tabBarItem1.title = "Home"
             tabBarItem1.image = UIImage(systemName: "homekit")
@@ -35,7 +38,7 @@ class MainPageViewController: UIViewController {
         self.tabBarController?.tabBar.backgroundColor = .darkGray
     }
     
-    
+    //Everytime a letter is entered this function is called and if the query is greater than 3 words a lazy search is done to the games.
     @IBAction func searchEntered(_ sender: Any){
         if let query = self.searchBar.text{
             if(query.count >= 3){
@@ -49,7 +52,7 @@ class MainPageViewController: UIViewController {
         }
     }
     
-    
+    //Setting up the page view screens. Just the first three is enough.
     func setupScreens() {
         for index in 0..<3 {
             frame.origin.x = scrollView.frame.size.width * CGFloat(index)
@@ -63,7 +66,12 @@ class MainPageViewController: UIViewController {
         scrollView.contentSize = CGSize(width: (scrollView.frame.size.width * CGFloat(3)), height: scrollView.frame.size.height)
         scrollView.delegate = self
     }
-
+    
+    /*
+     Prepare the data to pass it into Game Detail View. First check if the segue is coming from the search or the collection view.
+     Then if the segue is coming from the search, get the data from the search results and pass it. If its coming from the collection
+     view then get the data from the game list and pass it.
+     */
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if(segue.identifier == "TableViewSegue"){
             let cell = sender as! SearchResultCell
@@ -85,6 +93,7 @@ class MainPageViewController: UIViewController {
     }
 }
 
+//After the search is done or the games are recieved from the end point these functions are called.
 extension MainPageViewController: GameMainPageDelegate{
     func searchDone() {
         self.searchResultTableView.reloadData()
@@ -97,6 +106,7 @@ extension MainPageViewController: GameMainPageDelegate{
     }
 }
 
+//
 extension MainPageViewController: UITableViewDataSource{
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -188,6 +198,7 @@ extension MainPageViewController: UIScrollViewDelegate{
     }
 }
 
+//This is for loading an image from an URL
 extension UIImageView {
     func load(url: URL) {
         DispatchQueue.global().async { [weak self] in
